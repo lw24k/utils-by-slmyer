@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-26 22:52:52
- * @LastEditTime: 2021-04-26 23:03:00
+ * @LastEditTime: 2021-04-26 23:07:42
  */
 
 import _ from "loadsh";
@@ -25,7 +25,9 @@ const codeFont = [
  * id canvas id
  * height canvas height
  * width canvas width
- * @return {*}
+ * @return {
+ * canvas instance
+ * }
  */
 class VertifyCodes {
   constructor({
