@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 22:40:57
- * @LastEditTime: 2021-04-27 23:52:15
+ * @LastEditTime: 2021-04-28 21:21:45
  */
 import { fabric } from 'fabric';
 import EventBus from 'events';
@@ -12,6 +12,8 @@ import ModeFactor from './mode/ModeFactor';
 import { MODE_TYPES } from './mode/mode-types';
 /**
  * @description:
+ * 引入模式管理器 ， 并不关心模式的外的逻辑 ，只处理内部状态的更新以及调用更新函数指令
+ * base基类 提供通用 绘制模式的方法
  * @param {*}
  * id canvasid
  * width
@@ -32,9 +34,11 @@ export default class extends EventBus {
 
     this.proxy = {};
 
-    this.control = null;
+    this.control = null; // 模式状态管理器
 
-    this.excutor = [];
+    this.excutor = []; // 模式执行器
+
+    this.tempDrawingObjects = new WeakMap();
   }
 
   init() {
@@ -53,6 +57,8 @@ export default class extends EventBus {
     ModeFactor.setGlobalConfig({
       instance: this.instance,
       control: this.control,
+      tempDrawingObjects: this.tempDrawingObjects,
+      eventEmitHandler: this.eventEmitHandler,
     });
     Object.keys(MODE_TYPES).map((v) => {
       const mode = ModeFactor.excutor(v);
@@ -60,22 +66,34 @@ export default class extends EventBus {
       console.log(v);
       this.proxy[v] = {
         active: false,
+        name: v,
         exclude: ['*'],
-        update: function (status) {
-          mode.updateControls(status);
-        },
+        update: (status) => mode.updateControls(status),
       };
-      console.log(this.proxy[v], '0');
     });
   }
 
   changeProxy = (name, status) => {
     if (this.proxy[name]) {
-      this.proxy[name] = status;
+      this.proxy[name].active = status;
     }
   };
 
   enterMode = (mode) => {
     this.excutor[mode].enterMode();
+  };
+
+  clearAllDrawingObject() {
+    this.tempDrawingObjects = new WeakMap();
+  }
+
+  //模式事件处理器 暴露为全局方法
+  eventEmitHandler = (type, msg) => {
+    console.log(type, msg);
+    switch (type) {
+      case 'message':
+        this.emit('message', msg);
+        break;
+    }
   };
 }

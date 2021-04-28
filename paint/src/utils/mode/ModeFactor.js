@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 22:49:47
- * @LastEditTime: 2021-04-27 23:41:39
+ * @LastEditTime: 2021-04-28 21:20:43
  */
 import { MODE_TYPES } from './mode-types';
 import CircleMode from './circle-mode';
@@ -15,9 +15,16 @@ import FreeMode from './free-mode';
  * @return {*}
  */
 export default class {
-  static setGlobalConfig({ instance, control }) {
+  static setGlobalConfig({
+    instance,
+    control,
+    tempDrawingObjects,
+    eventEmitHandler,
+  }) {
     this.instance = instance;
     this.control = control;
+    this.tempDrawingObjects = tempDrawingObjects;
+    this.eventEmitHandler = eventEmitHandler;
   }
 
   static excutor(mode) {
@@ -27,6 +34,8 @@ export default class {
           instance: this.instance,
           control: this.control,
           mode,
+          tempDrawingObjects: this.tempDrawingObjects,
+          eventEmitHandler: this.eventEmitHandler,
         });
 
       case MODE_TYPES.FREE_MODE:
@@ -34,6 +43,8 @@ export default class {
           instance: this.instance,
           control: this.control,
           mode,
+          tempDrawingObjects: this.tempDrawingObjects,
+          eventEmitHandler: this.eventEmitHandler,
         });
     }
   }
