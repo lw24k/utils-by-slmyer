@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 22:40:57
- * @LastEditTime: 2021-04-28 21:21:45
+ * @LastEditTime: 2021-04-28 21:58:47
  */
 import { fabric } from 'fabric';
 import EventBus from 'events';
@@ -38,7 +38,10 @@ export default class extends EventBus {
 
     this.excutor = []; // 模式执行器
 
+    //临时绘制对象暂存
     this.tempDrawingObjects = new WeakMap();
+
+    this.ready = false; // 画板实例构造标志位
   }
 
   init() {
@@ -50,6 +53,10 @@ export default class extends EventBus {
     this.instance = instance;
 
     this.initModeManager();
+
+    this.ready = true;
+
+    this.emit('onReady', this.ready);
   }
 
   initModeManager() {
@@ -96,4 +103,18 @@ export default class extends EventBus {
         break;
     }
   };
+
+  //Sets dimensions (width, height) of this canvas instance
+  //canvas 画布实例尺寸变化
+  changeCanvasSize = ({ width, height, ratio }) => {
+    if (this.ready) {
+      this.instance.setDimensions({ width, height });
+    }
+  };
+
+  // 画布实例销毁
+  dispose() {
+    this.instance.dispose();
+    this.instance = null;
+  }
 }
