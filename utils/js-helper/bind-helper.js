@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 21:08:43
- * @LastEditTime: 2021-04-27 21:57:46
+ * @LastEditTime: 2021-04-28 20:38:51
  */
 
 /**
@@ -14,13 +14,16 @@
  * @param {*}
  * @return {*}
  */
+
+const _uniqueKey = Symbol();
 Function.prototype.myBind = function () {
   const self = this;
   const context = Array.prototype.shift.call(arguments);
   const args = Array.prototype.slice.call(arguments);
   let _bindFunc = function () {
     const _args = Array.prototype.slice.call(arguments);
-    return self.apply(context, args.concat(_args));
+    context[_uniqueKey] = self;
+    return context[_uniqueKey](args.concat(_args));
   };
   _bindFunc.prototype = Object.create(this.prototype);
   return _bindFunc;
