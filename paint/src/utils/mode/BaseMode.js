@@ -3,8 +3,12 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 22:51:00
- * @LastEditTime: 2021-04-28 21:21:36
+ * @LastEditTime: 2021-04-29 13:27:05
  */
+
+const BASE_FILL_COLOR = 'red';
+const BASE_STROKE_COLOR = 'red';
+const BASE_STROKE_WIDTH = 2;
 
 /**
  * @description:
@@ -16,6 +20,7 @@
  * }
  * @return {*}
  */
+
 export default class {
   constructor({
     instance,
@@ -29,6 +34,10 @@ export default class {
     this.control = control;
     this.tempDrawingObjects = tempDrawingObjects;
     this.eventEmitHandler = eventEmitHandler;
+
+    this.baseFillColor = BASE_FILL_COLOR;
+    this.baseStrokeColor = BASE_STROKE_COLOR;
+    this.baseStrokeWidth = BASE_STROKE_WIDTH;
   }
 
   // 模式状态切换 更新指令
@@ -44,14 +53,21 @@ export default class {
     this.control.updateStatus(this.mode, true);
   }
 
+  // 刷新画布
+  requestRender() {
+    this.instance.requestRenderAll();
+  }
+
   //获取当前绘制对象
   getDrawingObject() {
-    return this.tempDrawingObjects.get(this.mode);
+    const key = new Object(Symbol.for(this.mode));
+    return this.tempDrawingObjects.get(key);
   }
 
   // 设置绘制对象 提供缓存
   setDrawingObject(obj) {
-    this.tempDrawingObjects.set(this.name, obj);
+    const key = new Object(Symbol.for(this.mode));
+    this.tempDrawingObjects.set(key, obj);
   }
 
   // 判断模式是否开启
@@ -67,4 +83,18 @@ export default class {
       this.tempDrawingObjects.delete(this.mode);
     }
   }
+
+  handleMouseDown(event) {
+    console.log('base', event, '---');
+  }
+
+  handleMouseUp = (event) => {
+    console.log(event, 'e');
+  };
+
+  handleMouseMove = (event) => {};
+
+  handleDblClick = (event) => {
+    console.log(event, 'dbl');
+  };
 }

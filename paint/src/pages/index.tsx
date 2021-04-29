@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 22:22:10
- * @LastEditTime: 2021-04-28 21:59:26
+ * @LastEditTime: 2021-04-29 13:23:03
  */
 import { useState, useEffect } from 'react';
 import classnames from 'classnames';
@@ -20,7 +20,7 @@ interface InstanceType {
 let instance: InstanceType;
 export default function IndexPage() {
   const [state, setstate] = useState(false);
-  const [ratio, setRatio] = useState(1);
+  const [ratio, setRatio] = useState(1.778);
   useEffect(() => {
     console.log('render');
     instance = new Paint({ id: 'canvas', width: 500, height: 500 });
@@ -36,9 +36,9 @@ export default function IndexPage() {
     setstate(true);
   };
 
-  const changeSize = ({ width, height }: AttributeType) => {
+  const changeSize = ({ width, height, ratio }: AttributeType) => {
     console.log('changeSize', width, height);
-    instance.changeCanvasSize({ width, height });
+    instance.changeCanvasSize({ width, height, ratio });
   };
   return (
     <div>

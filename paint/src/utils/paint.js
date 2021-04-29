@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 22:40:57
- * @LastEditTime: 2021-04-28 21:58:47
+ * @LastEditTime: 2021-04-29 09:19:07
  */
 import { fabric } from 'fabric';
 import EventBus from 'events';
@@ -22,7 +22,7 @@ import { MODE_TYPES } from './mode/mode-types';
  * @return {*}
  */
 export default class extends EventBus {
-  constructor({ id, width, height, requestData }) {
+  constructor({ id, width, height, requestData, zoom = 1 }) {
     super();
 
     this._id = id;
@@ -42,17 +42,34 @@ export default class extends EventBus {
     this.tempDrawingObjects = new WeakMap();
 
     this.ready = false; // 画板实例构造标志位
+
+    this.forbidden = true;
+
+    this.zoom = zoom;
   }
 
   init() {
+    fabric.Object.prototype.selectable = !this.forbidden; // 设定fabric默认不可选择
+    fabric.Object.prototype.hasControls = false;
+    fabric.Object.prototype.evented = false; // 禁止元素事件
     const instance = new fabric.Canvas(this._id, {
       width: this.width,
       height: this.height,
+      allowTouchScrolling: false, // 允许移动端touch滚动
+      selectionFullyContained: true,
+      selection: this.forbidden ? false : true,
+      hoverCursor: 'pointer',
     });
 
     this.instance = instance;
 
+    this.instance.setZoom(this.zoom);
+
+    //初始化模式管理器
     this.initModeManager();
+
+    // 初始化事件注册
+    this.registerEventsHandler();
 
     this.ready = true;
 
@@ -109,6 +126,8 @@ export default class extends EventBus {
   changeCanvasSize = ({ width, height, ratio }) => {
     if (this.ready) {
       this.instance.setDimensions({ width, height });
+      this.instance.setZoom(this.zoom * ratio);
+      this.instance.absolutePan({ x: 0, y: 0 });
     }
   };
 
@@ -116,5 +135,51 @@ export default class extends EventBus {
   dispose() {
     this.instance.dispose();
     this.instance = null;
+  }
+
+  registerEventsHandler = () => {
+    this.instance.on({
+      'mouse:down': this.handleMouseDown,
+      'mouse:up': this.handleMouseUp,
+      'mouse:move': this.handleMouseMove,
+      'mouse:dblclick': this.handleDblClick,
+    });
+  };
+
+  // 鼠标事件入口
+  handleMouseDown = (event) => {
+    console.log(event, this.instance.getPointer(event), 'ppp');
+    Object.values(this.excutor).map((excutor) => {
+      excutor.handleMouseDown(event);
+    });
+  };
+
+  handleMouseUp = (event) => {
+    Object.values(this.excutor).map((excutor) => {
+      excutor.handleMouseUp(event);
+    });
+  };
+
+  handleMouseMove = (event) => {
+    Object.values(this.excutor).map((excutor) => {
+      excutor.handleMouseMove(event);
+    });
+  };
+
+  handleDblClick = (event) => {
+    Object.values(this.excutor).map((excutor) => {
+      excutor.handleDblClick(event);
+    });
+  };
+
+  // 画布选中功能禁用
+  toggleSelectStatus() {
+    this.forbidden = !this.forbidden;
+    if (this.forbidden) {
+      this.instance.discardActiveObject();
+    }
+    fabric.Object.prototype.selectable = !this.forbidden;
+    this.instance.selection = !this.forbidden;
+    this.instance.requestRenderAll();
   }
 }
