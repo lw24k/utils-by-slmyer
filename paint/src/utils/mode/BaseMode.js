@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 22:51:00
- * @LastEditTime: 2021-04-29 13:27:05
+ * @LastEditTime: 2021-04-29 17:04:09
  */
 
 const BASE_FILL_COLOR = 'red';
@@ -38,6 +38,8 @@ export default class {
     this.baseFillColor = BASE_FILL_COLOR;
     this.baseStrokeColor = BASE_STROKE_COLOR;
     this.baseStrokeWidth = BASE_STROKE_WIDTH;
+
+    this.Symbolkey = new Object(Symbol.for(this.mode));
   }
 
   // 模式状态切换 更新指令
@@ -60,13 +62,13 @@ export default class {
 
   //获取当前绘制对象
   getDrawingObject() {
-    const key = new Object(Symbol.for(this.mode));
+    const key = this.Symbolkey;
     return this.tempDrawingObjects.get(key);
   }
 
   // 设置绘制对象 提供缓存
   setDrawingObject(obj) {
-    const key = new Object(Symbol.for(this.mode));
+    const key = this.Symbolkey;
     this.tempDrawingObjects.set(key, obj);
   }
 

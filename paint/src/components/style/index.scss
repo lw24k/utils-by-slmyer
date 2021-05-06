@@ -5,3 +5,36 @@
   justify-content: center;
   align-items: center;
 }
+
+.tool {
+  @extend .full;
+  justify-content: flex-start;
+  padding: 16px;
+}
+.menu {
+  @extend .full;
+  justify-content: flex-start;
+  .box {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column;
+    img {
+      height: 20px;
+      width: 20px;
+    }
+    span {
+      margin-top: 8px;
+      display: inline-block;
+    }
+    &:not(:first-child) {
+      margin-left: 10px;
+    }
+    &.active {
+      border: 1px solid #62a2e4;
+      background: #c9e0f7;
+    }
+  }
+}

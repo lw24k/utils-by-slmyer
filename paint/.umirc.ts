@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 22:22:10
- * @LastEditTime: 2021-04-28 21:31:58
+ * @LastEditTime: 2021-04-29 21:18:48
  */
 import { defineConfig } from 'umi';
 
@@ -12,9 +12,19 @@ export default defineConfig({
     type: 'none',
   },
   sass: {},
-  routes: [{ path: '/', component: '@/pages/index' }],
+  routes: [
+    {
+      exact: false,
+      path: '/',
+      component: '@/layouts/index',
+      routes: [{ exact: true, path: '/', component: '@/pages/index' }],
+    },
+  ],
   fastRefresh: {},
   alias: {
     components: '/src/components',
+    common: '/src/common',
+    icon: '/src/assets/icon',
+    utils: '/src/utils',
   },
 });

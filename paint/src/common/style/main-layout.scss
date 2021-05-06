@@ -1,0 +1,28 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+.root {
+  width: 100vw;
+  height: 100vh;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column;
+  .canvas {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #f6f6f6;
+    // background: #f4f4f4;
+  }
+  .tool {
+    flex: 0 0 80px;
+    width: 100%;
+    overflow: hidden;
+    box-shadow: 2px 2px 2px rgba($color: #000000, $alpha: 0.1);
+  }
+}

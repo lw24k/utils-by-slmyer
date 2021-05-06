@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 23:05:06
- * @LastEditTime: 2021-04-29 00:01:44
+ * @LastEditTime: 2021-04-29 20:41:13
  */
 import BaseMode from './BaseMode';
 export default class extends BaseMode {
@@ -46,13 +46,12 @@ export default class extends BaseMode {
     }
     console.log(event, 111, this.instance);
     const point = this.instance.getPointer(event, false);
-    console.log(point, 'pointpoint');
     if (!this.getDrawingObject()) {
       this.startPoint = point;
       const circle = this.createDrawingCircle({
         left: point.x,
         top: point.y,
-        radius: 10,
+        radius: 1,
       });
       this.setDrawingObject(circle);
 
