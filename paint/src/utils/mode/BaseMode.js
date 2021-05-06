@@ -3,12 +3,14 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 22:51:00
- * @LastEditTime: 2021-04-29 17:04:09
+ * @LastEditTime: 2021-05-06 22:13:01
  */
 
 const BASE_FILL_COLOR = 'red';
 const BASE_STROKE_COLOR = 'red';
 const BASE_STROKE_WIDTH = 2;
+const BASE_TEXT_COLOR = '#000';
+const BASE_TEXT_SIZE = 16;
 
 /**
  * @description:
@@ -38,6 +40,8 @@ export default class {
     this.baseFillColor = BASE_FILL_COLOR;
     this.baseStrokeColor = BASE_STROKE_COLOR;
     this.baseStrokeWidth = BASE_STROKE_WIDTH;
+    this.baseTextFillColor = BASE_TEXT_COLOR;
+    this.baseTextSize = BASE_TEXT_SIZE;
 
     this.Symbolkey = new Object(Symbol.for(this.mode));
   }
@@ -53,6 +57,11 @@ export default class {
   //进入模式
   enterMode() {
     this.control.updateStatus(this.mode, true);
+  }
+
+  //进入模式
+  leaveMode() {
+    this.control.updateStatus(this.mode, false);
   }
 
   // 刷新画布
@@ -79,10 +88,10 @@ export default class {
 
   //清空临时绘制对象 用于模式切换时
   clearCurrentModeDrawing() {
-    const _obj = this.tempDrawingObjects.get(this.mode);
+    const _obj = this.tempDrawingObjects.get(this.Symbolkey);
     if (_obj) {
       this.instance.remove(_obj);
-      this.tempDrawingObjects.delete(this.mode);
+      this.tempDrawingObjects.delete(this.Symbolkey);
     }
   }
 
@@ -90,13 +99,28 @@ export default class {
     console.log('base', event, '---');
   }
 
-  handleMouseUp = (event) => {
+  handleMouseUp(event) {
     console.log(event, 'e');
-  };
+  }
 
-  handleMouseMove = (event) => {};
+  handleMouseMove(event) {}
 
-  handleDblClick = (event) => {
+  handleDblClick(event) {
     console.log(event, 'dbl');
-  };
+  }
+
+  setDrawStyle({
+    fillColor,
+    storkeWidth,
+    storkeColor,
+    textSize,
+    textFill,
+    textStorke,
+  }) {
+    this.baseFillColor = fillColor;
+    this.baseStrokeColor = storkeColor;
+    this.baseStrokeWidth = storkeWidth;
+    this.baseTextFillColor = textFill;
+    this.baseTextSize = textSize;
+  }
 }

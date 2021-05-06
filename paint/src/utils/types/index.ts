@@ -3,14 +3,15 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-29 20:55:41
- * @LastEditTime: 2021-04-29 21:10:55
+ * @LastEditTime: 2021-05-06 18:53:37
  */
+import { MODE_TYPES } from '../mode/mode-types';
 import mode from 'icon/mode.png';
 import clear from 'icon/clear.png';
 import select from 'icon/select.png';
 
-// import circle from 'icon/circle.png';
-// import free from 'icon/free.png';
+import circle from 'icon/circle.png';
+import free from 'icon/free.png';
 export interface Type {
   title: string;
   value: string;
@@ -35,4 +36,24 @@ const MODE_MENU: Array<Type> = [
   },
 ];
 
-export { MODE_MENU };
+const MODE_CONTROL = {
+  mode: {
+    title: '模式选择',
+    icons: [
+      {
+        title: '画圆',
+        value: 'circle',
+        icon: circle,
+        mode: MODE_TYPES.CIRCLE_MODE,
+      },
+      {
+        title: '涂鸦',
+        value: 'free',
+        icon: free,
+        mode: MODE_TYPES.FREE_MODE,
+      },
+    ],
+  },
+};
+
+export { MODE_MENU, MODE_CONTROL };

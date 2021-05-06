@@ -3,8 +3,9 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 23:05:06
- * @LastEditTime: 2021-04-29 20:41:13
+ * @LastEditTime: 2021-05-06 20:50:51
  */
+import Color from 'color';
 import BaseMode from './BaseMode';
 export default class extends BaseMode {
   constructor({
@@ -22,10 +23,34 @@ export default class extends BaseMode {
     this.endPoint = {};
   }
 
-  createCircle({ left, top, radius }) {}
+  createCircle({ left, top, radius }) {
+    if (radius < 2) {
+      radius = 5;
+    }
+    const circle = new fabric.Circle({
+      fill: Color(this.baseFillColor).fade(0.9),
+      fillColor: this.baseFillColor,
+      strokeWidth: this.baseStrokeWidth,
+      stroke: this.baseStrokeColor,
+      objectCaching: false,
+      evented: true,
+      perPixelTargetFind: true,
+      radius,
+      left,
+      top,
+      custom: {
+        mode: this.name,
+        extend: this.extend,
+        fillColor: this.baseFillColor,
+        strokeWidth: this.baseStrokeWidth,
+        stroke: this.baseStrokeColor,
+        _unique: JSON.stringify(this.positionAttribute),
+      },
+    });
+    return circle;
+  }
 
   createDrawingCircle({ left, top, radius }) {
-    console.log(left, top, radius, this.baseStrokeColor);
     const circle = new fabric.Circle({
       fill: 'transparent',
       strokeWidth: this.baseStrokeWidth,
@@ -44,9 +69,10 @@ export default class extends BaseMode {
     if (!this.isModeActive()) {
       return false;
     }
-    console.log(event, 111, this.instance);
     const point = this.instance.getPointer(event, false);
-    if (!this.getDrawingObject()) {
+    const circle = this.getDrawingObject();
+    console.log(circle, 'circle0000');
+    if (!circle) {
       this.startPoint = point;
       const circle = this.createDrawingCircle({
         left: point.x,
@@ -59,24 +85,45 @@ export default class extends BaseMode {
 
       this.requestRender();
     }
-
-    console.log('circle', event);
   }
 
   handleMouseMove(event) {
     if (!this.isModeActive()) {
-      return;
+      return false;
+    }
+    const circle = this.getDrawingObject();
+    if (circle) {
+      const pointer = this.instance.getPointer(event, false);
+      let x = pointer.x - this.startPoint.x;
+      let y = pointer.y - this.startPoint.y;
+      let midx = (this.startPoint.x + pointer.x) / 2;
+      let midy = (this.startPoint.y + pointer.y) / 2;
+      let radius = Math.sqrt(x * x + y * y) / 2;
+      circle
+        .set('radius', Math.sqrt(x * x + y * y) / 2)
+        .set('top', midy - radius)
+        .set('left', midx - radius);
+
+      this.positionAttribute = {
+        radius: Math.sqrt(x * x + y * y) / 2,
+        top: midy - radius,
+        left: midx - radius,
+      };
+      this.requestRender();
     }
   }
 
-  handleMouseMove(event) {
-    console.log('circle', event);
-  }
-
   handleDblClick(event) {
-    console.log('circle', event);
     this.done();
   }
 
-  done() {}
+  done() {
+    const _circle = this.getDrawingObject();
+    if (_circle) {
+      const circle = this.createCircle({ ...this.positionAttribute });
+      this.clearCurrentModeDrawing();
+      this.instance.add(circle);
+      this.requestRender();
+    }
+  }
 }

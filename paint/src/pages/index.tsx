@@ -3,9 +3,9 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 22:22:10
- * @LastEditTime: 2021-05-06 17:27:53
+ * @LastEditTime: 2021-05-06 20:52:21
  */
-import { useState, useEffect, FC } from 'react';
+import { useState, useEffect, FC, Dispatch } from 'react';
 import classnames from 'classnames';
 import styles from './index.scss';
 import Paint from '../utils/paint.js';
@@ -18,7 +18,9 @@ interface InstanceType {
   dispose: Function;
 }
 
-interface PageProps extends ConnectProps {}
+interface PageProps extends ConnectProps {
+  dispatch: Dispatch;
+}
 let instance: InstanceType;
 const IndexPage: FC<PageProps> = (props) => {
   const { dispatch } = props;

@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 22:40:57
- * @LastEditTime: 2021-04-29 09:19:07
+ * @LastEditTime: 2021-05-06 22:12:26
  */
 import { fabric } from 'fabric';
 import EventBus from 'events';
@@ -51,7 +51,7 @@ export default class extends EventBus {
   init() {
     fabric.Object.prototype.selectable = !this.forbidden; // 设定fabric默认不可选择
     fabric.Object.prototype.hasControls = false;
-    fabric.Object.prototype.evented = false; // 禁止元素事件
+    // fabric.Object.prototype.evented = false; // 禁止元素事件
     const instance = new fabric.Canvas(this._id, {
       width: this.width,
       height: this.height,
@@ -59,6 +59,8 @@ export default class extends EventBus {
       selectionFullyContained: true,
       selection: this.forbidden ? false : true,
       hoverCursor: 'pointer',
+      perPixelTargetFind: true,
+      evented: true,
     });
 
     this.instance = instance;
@@ -104,7 +106,13 @@ export default class extends EventBus {
   };
 
   enterMode = (mode) => {
-    this.excutor[mode].enterMode();
+    if (mode) {
+      this.toggleSelectStatus(true);
+      this.excutor[mode].enterMode();
+      this.emit('enterMode', true);
+      return true;
+    }
+    return false;
   };
 
   clearAllDrawingObject() {
@@ -172,14 +180,40 @@ export default class extends EventBus {
     });
   };
 
-  // 画布选中功能禁用
-  toggleSelectStatus() {
-    this.forbidden = !this.forbidden;
+  // 画布选中功能禁用/ 开启
+  toggleSelectStatus(flag) {
+    this.forbidden = flag || !this.forbidden;
     if (this.forbidden) {
       this.instance.discardActiveObject();
     }
     fabric.Object.prototype.selectable = !this.forbidden;
+    console.log(
+      fabric.Object.prototype.selectable,
+      'fabric.Object.prototype.selectable',
+    );
     this.instance.selection = !this.forbidden;
+    this.resetMode();
     this.instance.requestRenderAll();
+  }
+
+  leaveMode = (mode) => {
+    if (mode) {
+      this.excutor[mode].leaveMode();
+      this.emit('leaveMode', true);
+      return true;
+    }
+    return false;
+  };
+
+  // 清空画布
+  clearInstance() {
+    this.clearAllDrawingObject();
+    this.instance.remove(...this.instance.getObjects());
+    this.instance.requestRenderAll();
+    return true;
+  }
+
+  resetMode() {
+    this.control.resetMode();
   }
 }

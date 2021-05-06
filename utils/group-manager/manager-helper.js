@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 22:22:59
- * @LastEditTime: 2021-04-28 20:59:12
+ * @LastEditTime: 2021-05-06 21:27:03
  */
 export default class {
   constructor(proxy, changeProxy) {
@@ -61,16 +61,17 @@ export default class {
           }
         }
       } else {
+        control.active = status;
         if (Array.isArray(exclude)) {
           if (exclude.includes("*")) {
             names.map((key) => {
-              this.changeProxy(key, true);
-              this.updateControls(key, true);
+              this.changeProxy(key, false);
+              this.updateControls(key, false);
             });
           } else {
             exclude.map((key) => {
-              this.changeProxy(key, true);
-              this.updateControls(key, true);
+              this.changeProxy(key, false);
+              this.updateControls(key, false);
             });
           }
         }
@@ -89,6 +90,8 @@ export default class {
         }
       }
     }
+    this.changeProxy(mode, status);
+    this.updateControls(mode, status);
   }
 
   resetMode() {
