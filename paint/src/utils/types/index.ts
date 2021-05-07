@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-29 20:55:41
- * @LastEditTime: 2021-05-06 18:53:37
+ * @LastEditTime: 2021-05-07 21:09:03
  */
 import { MODE_TYPES } from '../mode/mode-types';
 import mode from 'icon/mode.png';
@@ -12,6 +12,7 @@ import select from 'icon/select.png';
 
 import circle from 'icon/circle.png';
 import free from 'icon/free.png';
+import mosaic from 'icon/mosaic.png';
 export interface Type {
   title: string;
   value: string;
@@ -51,6 +52,12 @@ const MODE_CONTROL = {
         value: 'free',
         icon: free,
         mode: MODE_TYPES.FREE_MODE,
+      },
+      {
+        title: '马赛克',
+        value: 'mosaic',
+        icon: mosaic,
+        mode: MODE_TYPES.FREE_BRUSH_MODE,
       },
     ],
   },

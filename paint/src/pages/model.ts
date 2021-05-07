@@ -3,55 +3,64 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-05-05 13:50:04
- * @LastEditTime: 2021-05-06 21:05:49
+ * @LastEditTime: 2021-05-07 21:04:41
  */
-import { Effect, ImmerReducer, Reducer, Subscription, Action } from 'umi';
-export interface StateType {
-  activeMode: string;
-  panelVisible: boolean;
-  instance: any;
-  mode: string;
+import { Effect, Reducer, Subscription, Action } from 'umi';
+import { HomeState } from '../types/type';
+export interface HomeModelType {
+  namespace: 'home';
+  state: HomeState;
+  effects: {
+    enterMode: Effect;
+  };
+  reducers: {
+    changeMode: Reducer<HomeState>;
+    setInstance: Reducer<HomeState>;
+    setVisible: Reducer<HomeState>;
+    setDrawMode: Reducer<HomeState>;
+  };
 }
-export default {
+const homeModel: HomeModelType = {
   namespace: 'home',
   state: {
     activeMode: '',
-    instace: null,
+    instance: null,
     panelVisible: false,
     mode: '',
   },
   effects: {
     *enterMode({ payload }, { call, put }) {
       yield put({ type: 'changeMode', payload });
-      yield put({ type: 'setVisible', payload: true });
+      yield put({ type: 'setVisible', payload: { panelVisible: true } });
       // instance.enterMode(payload);
     },
   },
   reducers: {
-    changeMode: (state: StateType, { payload, action }) => {
+    changeMode: (state, { payload, action }) => {
       return {
         ...state,
-        activeMode: payload,
+        ...payload,
       };
     },
-    setInstance: (state: StateType, { payload }) => {
-      console.log(payload, '---');
+    setInstance: (state, { payload }) => {
       return {
         ...state,
-        instance: payload,
+        ...payload,
       };
     },
-    setVisible: (state: StateType, { payload }) => {
+    setVisible: (state, { payload }) => {
       return {
         ...state,
-        panelVisible: payload,
+        ...payload,
       };
     },
-    setDrawMode: (state: StateType, { payload }) => {
+    setDrawMode: (state, { payload }) => {
       return {
         ...state,
-        mode: payload,
+        ...payload,
       };
     },
   },
 };
+
+export default homeModel;

@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 22:22:59
- * @LastEditTime: 2021-05-06 21:27:03
+ * @LastEditTime: 2021-05-07 22:00:49
  */
 export default class {
   constructor(proxy, changeProxy) {
@@ -12,7 +12,6 @@ export default class {
   }
 
   updateControls(mode, status) {
-    console.log(mode, "====", this.proxy[mode]);
     if (this.proxy[mode]) {
       this.proxy[mode].update(status);
     }
@@ -28,7 +27,6 @@ export default class {
    */
   updateStatus(mode, status) {
     const control = this.proxy[mode];
-    console.log(this.proxy, status, control, "----");
     if (control) {
       const names = Object.keys(this.proxy).filter((name) => name !== mode);
       const { include, exclude } = control;

@@ -3,20 +3,15 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 22:22:10
- * @LastEditTime: 2021-05-06 20:52:21
+ * @LastEditTime: 2021-05-07 20:49:45
  */
-import { useState, useEffect, FC, Dispatch } from 'react';
+import { useState, useEffect, FC } from 'react';
 import classnames from 'classnames';
 import styles from './index.scss';
 import Paint from '../utils/paint.js';
 import RatioContainer, { AttributeType } from 'components/RatioContainer';
-import { ConnectProps, Loading, connect } from 'umi';
-interface InstanceType {
-  init: Function;
-  changeCanvasSize: Function;
-  enterMode: Function;
-  dispose: Function;
-}
+import { ConnectProps, Loading, connect, Dispatch } from 'umi';
+import { ConnectState, InstanceType } from '../types/type';
 
 interface PageProps extends ConnectProps {
   dispatch: Dispatch;
@@ -28,7 +23,7 @@ const IndexPage: FC<PageProps> = (props) => {
   const [ratio, setRatio] = useState(1.778);
   useEffect(() => {
     instance = new Paint({ id: 'canvas' });
-    dispatch({ type: 'home/setInstance', payload: instance });
+    dispatch({ type: 'home/setInstance', payload: { instance } });
     instance.init();
     return () => {
       instance.dispose();
@@ -50,7 +45,7 @@ const IndexPage: FC<PageProps> = (props) => {
   );
 };
 
-export default connect(({ home }: ConnectProps) => {
+export default connect(({ home }: ConnectState) => {
   return {
     home,
   };

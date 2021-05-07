@@ -3,16 +3,17 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-29 20:54:34
- * @LastEditTime: 2021-05-06 21:40:58
+ * @LastEditTime: 2021-05-07 21:03:17
  */
 import classnames from 'classnames';
 import React, { FC } from 'react';
 import { MODE_MENU, Type } from 'utils/types/index.ts';
 import style from './style/index.scss';
-import { connect, ConnectProps, Dispatch, StateType } from 'umi';
+import { connect, ConnectProps, Dispatch } from 'umi';
+import { HomeState } from '../types/type';
 
 interface PageProps extends ConnectProps {
-  home: StateType;
+  home: HomeState;
   dispatch: Dispatch;
 }
 const ModeControl: FC<PageProps> = (props) => {
@@ -22,14 +23,15 @@ const ModeControl: FC<PageProps> = (props) => {
   } = props;
   const changeMode = (value: string) => {
     if (value === 'mode') {
-      dispatch({ type: 'home/enterMode', payload: value });
+      dispatch({ type: 'home/enterMode', payload: { activeMode: value } });
+      console.log(instance, '9988');
       instance.toggleSelectStatus(true);
     } else if (value === 'clear') {
       instance.clearInstance();
     } else if (value === 'select') {
       const _mode = activeMode !== 'select' ? 'select' : '';
-      dispatch({ type: 'home/changeMode', payload: _mode });
-      dispatch({ type: 'home/setDrawMode', payload: '' });
+      dispatch({ type: 'home/changeMode', payload: { activeMode: _mode } });
+      dispatch({ type: 'home/setDrawMode', payload: { mode: '' } });
       instance.toggleSelectStatus();
     }
   };

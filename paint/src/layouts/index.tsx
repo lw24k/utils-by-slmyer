@@ -3,19 +3,19 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-29 17:16:30
- * @LastEditTime: 2021-05-06 21:02:52
+ * @LastEditTime: 2021-05-07 21:26:35
  */
 import React, { FC } from 'react';
 import classnames from 'classnames';
 import style from 'common/style/main-layout.scss';
 import Tool from 'components/Tool';
-import { connect, ConnectProps, StateType, Dispatch } from 'umi';
+import { connect, Dispatch } from 'umi';
 import { Drawer } from 'antd';
 import { MODE_CONTROL } from '../utils/types/index';
-interface RenderProps extends ConnectProps {
+import { ConnectState, HomeState } from '../types/type';
+interface RenderProps extends ConnectState {
   children: React.ReactNode;
   dispatch: Dispatch;
-  home: StateType;
 }
 
 const MainLayout: FC<RenderProps> = (props) => {
@@ -25,22 +25,22 @@ const MainLayout: FC<RenderProps> = (props) => {
   } = props;
 
   const onClose = () => {
-    dispatch({ type: 'home/setVisible', payload: false });
-    dispatch({ type: 'home/changeMode', payload: '' });
+    dispatch({ type: 'home/setVisible', payload: { panelVisible: false } });
+    dispatch({ type: 'home/changeMode', payload: { mode: '' } });
     instance.leaveMode(mode);
-    dispatch({ type: 'home/setDrawMode', payload: '' });
+    dispatch({ type: 'home/setDrawMode', payload: { mode: '' } });
   };
 
   const handleClick = (mode: string) => {
+    console.log(mode, '989879');
     instance.enterMode(mode);
-
-    dispatch({ type: 'home/setVisible', payload: false });
-    dispatch({ type: 'home/setDrawMode', payload: mode });
+    dispatch({ type: 'home/setVisible', payload: { panelVisible: false } });
+    dispatch({ type: 'home/setDrawMode', payload: { mode } });
   };
   return (
     <div className={classnames(style.root)}>
       <div className={classnames(style.tool)}>
-        <Tool></Tool>
+        <Tool {...props}></Tool>
       </div>
       <div className={classnames(style.canvas)}>{props.children}</div>
       <Drawer
@@ -76,6 +76,6 @@ const MainLayout: FC<RenderProps> = (props) => {
   );
 };
 
-export default connect(({ home }: RenderProps) => {
+export default connect(({ home }: ConnectState) => {
   return { home };
 })(MainLayout);
