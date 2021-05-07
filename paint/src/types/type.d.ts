@@ -1,10 +1,9 @@
-import { ConnectProps } from './../.umi/plugin-dva/connect';
 /*
  * @Descripttion:
  * @version:
  * @Author: slmyer
  * @Date: 2021-05-07 20:35:09
- * @LastEditTime: 2021-05-07 21:28:13
+ * @LastEditTime: 2021-05-07 22:05:40
  */
 
 export interface HomeState {
