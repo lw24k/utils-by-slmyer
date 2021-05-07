@@ -6,8 +6,9 @@ freeDrawingBrush.width is a number in pixels, and represents brush thickness.
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 23:05:06
- * @LastEditTime: 2021-05-06 21:47:48
+ * @LastEditTime: 2021-05-07 22:25:51
  */
+import { fabric } from 'fabric';
 import BaseMode from './BaseMode';
 export default class extends BaseMode {
   constructor({
@@ -24,6 +25,7 @@ export default class extends BaseMode {
       this.clearCurrentModeDrawing();
     }
     this.instance.isDrawingMode = status;
+    this.instance.freeDrawingBrush = new fabric.PencilBrush(this.instance);
     this.instance.freeDrawingBrush.color = this.baseStrokeColor;
     this.instance.freeDrawingBrush.width = this.baseStrokeWidth;
   }

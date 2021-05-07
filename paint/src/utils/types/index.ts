@@ -3,12 +3,13 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-29 20:55:41
- * @LastEditTime: 2021-05-07 21:09:03
+ * @LastEditTime: 2021-05-07 22:09:23
  */
 import { MODE_TYPES } from '../mode/mode-types';
 import mode from 'icon/mode.png';
 import clear from 'icon/clear.png';
 import select from 'icon/select.png';
+import _delete from 'icon/delete.png';
 
 import circle from 'icon/circle.png';
 import free from 'icon/free.png';
@@ -34,6 +35,11 @@ const MODE_MENU: Array<Type> = [
     title: '清空',
     value: 'clear',
     icon: clear,
+  },
+  {
+    title: '删除',
+    value: 'delete',
+    icon: _delete,
   },
 ];
 

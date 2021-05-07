@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-29 20:54:34
- * @LastEditTime: 2021-05-07 21:03:17
+ * @LastEditTime: 2021-05-07 22:13:24
  */
 import classnames from 'classnames';
 import React, { FC } from 'react';
@@ -33,6 +33,8 @@ const ModeControl: FC<PageProps> = (props) => {
       dispatch({ type: 'home/changeMode', payload: { activeMode: _mode } });
       dispatch({ type: 'home/setDrawMode', payload: { mode: '' } });
       instance.toggleSelectStatus();
+    } else if (value === 'delete') {
+      instance.deleteObject();
     }
   };
   return (

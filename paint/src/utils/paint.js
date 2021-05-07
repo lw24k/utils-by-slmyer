@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 22:40:57
- * @LastEditTime: 2021-05-06 22:12:26
+ * @LastEditTime: 2021-05-07 22:12:18
  */
 import { fabric } from 'fabric';
 import EventBus from 'events';
@@ -213,7 +213,19 @@ export default class extends EventBus {
     return true;
   }
 
+  //重置模式
   resetMode() {
     this.control.resetMode();
+  }
+
+  // 删除单个选中
+  deleteObject() {
+    const target = this.instance.getActiveObject();
+    if (target) {
+      this.instance.remove(target);
+      this.instance.requestRenderAll();
+      return true;
+    }
+    return false;
   }
 }
