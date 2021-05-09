@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 21:08:43
- * @LastEditTime: 2021-05-09 22:17:00
+ * @LastEditTime: 2021-05-09 22:26:22
  */
 
 /**
@@ -31,7 +31,7 @@ Function.prototype.myBind = function () {
   return _bindFunc;
 };
 
-Function.prototype.myApply = function (context, args) {
+Function.prototype.myApply = function (context, ...args) {
   context[_uniqueKey] = this;
   let res = context[_uniqueKey](args);
   delete context[_uniqueKey];
