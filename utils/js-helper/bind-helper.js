@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 21:08:43
- * @LastEditTime: 2021-04-28 20:38:51
+ * @LastEditTime: 2021-05-09 22:17:00
  */
 
 /**
@@ -23,8 +23,17 @@ Function.prototype.myBind = function () {
   let _bindFunc = function () {
     const _args = Array.prototype.slice.call(arguments);
     context[_uniqueKey] = self;
-    return context[_uniqueKey](args.concat(_args));
+    let res = context[_uniqueKey](args.concat(_args));
+    delete context[_uniqueKey];
+    return res;
   };
   _bindFunc.prototype = Object.create(this.prototype);
   return _bindFunc;
+};
+
+Function.prototype.myApply = function (context, args) {
+  context[_uniqueKey] = this;
+  let res = context[_uniqueKey](args);
+  delete context[_uniqueKey];
+  return res;
 };
