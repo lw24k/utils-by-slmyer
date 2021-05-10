@@ -95,19 +95,13 @@ export default class {
     }
   }
 
-  handleMouseDown(event) {
-    console.log('base', event, '---');
-  }
+  handleMouseDown(event) {}
 
-  handleMouseUp(event) {
-    console.log(event, 'e');
-  }
+  handleMouseUp(event) {}
 
   handleMouseMove(event) {}
 
-  handleDblClick(event) {
-    console.log(event, 'dbl');
-  }
+  handleDblClick(event) {}
 
   setDrawStyle({
     fillColor,

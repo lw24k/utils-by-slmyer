@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-29 20:55:41
- * @LastEditTime: 2021-05-07 22:09:23
+ * @LastEditTime: 2021-05-10 22:41:13
  */
 import { MODE_TYPES } from '../mode/mode-types';
 import mode from 'icon/mode.png';
@@ -14,22 +14,37 @@ import _delete from 'icon/delete.png';
 import circle from 'icon/circle.png';
 import free from 'icon/free.png';
 import mosaic from 'icon/mosaic.png';
-export interface Type {
+export interface SingleType {
   title: string;
   value: string;
   icon: any;
+  mode?: string;
+  isActiveFunc?: boolean;
 }
 
-const MODE_MENU: Array<Type> = [
+interface DrawType {
+  title: string;
+  value: string;
+  icon: any;
+  icons: Array<SingleType>;
+}
+
+interface ControlType {
+  [propName: string]: DrawType;
+}
+
+const MODE_MENU: Array<SingleType> = [
   {
     title: '模式',
     value: 'mode',
     icon: mode,
+    isActiveFunc: true,
   },
   {
     title: '选择',
     value: 'select',
     icon: select,
+    isActiveFunc: true,
   },
   {
     title: '清空',
@@ -43,7 +58,7 @@ const MODE_MENU: Array<Type> = [
   },
 ];
 
-const MODE_CONTROL = {
+const MODE_CONTROL: ControlType = {
   mode: {
     title: '模式选择',
     icons: [

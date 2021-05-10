@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 22:22:10
- * @LastEditTime: 2021-04-29 21:18:48
+ * @LastEditTime: 2021-05-10 21:41:37
  */
 import { defineConfig } from 'umi';
 
@@ -14,10 +14,9 @@ export default defineConfig({
   sass: {},
   routes: [
     {
-      exact: false,
+      exact: true,
       path: '/',
-      component: '@/layouts/index',
-      routes: [{ exact: true, path: '/', component: '@/pages/index' }],
+      component: '@/pages/Paint',
     },
   ],
   fastRefresh: {},

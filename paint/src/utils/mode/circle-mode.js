@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 23:05:06
- * @LastEditTime: 2021-05-06 20:50:51
+ * @LastEditTime: 2021-05-10 22:44:53
  */
 import Color from 'color';
 import BaseMode from './BaseMode';
@@ -71,7 +71,6 @@ export default class extends BaseMode {
     }
     const point = this.instance.getPointer(event, false);
     const circle = this.getDrawingObject();
-    console.log(circle, 'circle0000');
     if (!circle) {
       this.startPoint = point;
       const circle = this.createDrawingCircle({

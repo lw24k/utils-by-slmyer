@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-05-07 20:35:09
- * @LastEditTime: 2021-05-07 22:05:40
+ * @LastEditTime: 2021-05-10 20:21:13
  */
 
 export interface HomeState {
@@ -13,8 +13,13 @@ export interface HomeState {
   mode: string;
 }
 
+export interface GlobalState {
+  instance: InstanceType | null;
+}
+
 export interface ConnectState {
-  home: HomeState;
+  home: HomeState;,
+  global: GlobalState
 }
 
 export interface InstanceType {
@@ -22,4 +27,5 @@ export interface InstanceType {
   changeCanvasSize: Function;
   enterMode: Function;
   dispose: Function;
+  [propName: string]: Function;
 }

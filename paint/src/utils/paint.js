@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 22:40:57
- * @LastEditTime: 2021-05-07 22:12:18
+ * @LastEditTime: 2021-05-10 22:44:41
  */
 import { fabric } from 'fabric';
 import EventBus from 'events';
@@ -89,7 +89,6 @@ export default class extends EventBus {
     Object.keys(MODE_TYPES).map((v) => {
       const mode = ModeFactor.excutor(v);
       this.excutor[v] = mode;
-      console.log(v);
       this.proxy[v] = {
         active: false,
         name: v,
@@ -156,7 +155,6 @@ export default class extends EventBus {
 
   // 鼠标事件入口
   handleMouseDown = (event) => {
-    console.log(event, this.instance.getPointer(event), 'ppp');
     Object.values(this.excutor).map((excutor) => {
       excutor.handleMouseDown(event);
     });
@@ -187,10 +185,6 @@ export default class extends EventBus {
       this.instance.discardActiveObject();
     }
     fabric.Object.prototype.selectable = !this.forbidden;
-    console.log(
-      fabric.Object.prototype.selectable,
-      'fabric.Object.prototype.selectable',
-    );
     this.instance.selection = !this.forbidden;
     this.resetMode();
     this.instance.requestRenderAll();

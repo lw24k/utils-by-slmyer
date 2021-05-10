@@ -3,39 +3,32 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-29 20:54:34
- * @LastEditTime: 2021-05-07 22:13:24
+ * @LastEditTime: 2021-05-10 22:41:30
  */
 import classnames from 'classnames';
 import React, { FC } from 'react';
 import { MODE_MENU, Type } from 'utils/types/index.ts';
 import style from './style/index.scss';
 import { connect, ConnectProps, Dispatch } from 'umi';
-import { HomeState } from '../types/type';
+import { ConnectState, InstanceType, GlobalState } from '../../types/type';
 
 interface PageProps extends ConnectProps {
-  home: HomeState;
   dispatch: Dispatch;
+  menu: string;
+  setMenu: Function;
+  setVisible: Function;
+  global: GlobalState;
 }
 const ModeControl: FC<PageProps> = (props) => {
   const {
-    home: { activeMode, instance },
+    menu,
+    setMenu,
     dispatch,
+    global: { instance },
+    setVisible,
   } = props;
   const changeMode = (value: string) => {
-    if (value === 'mode') {
-      dispatch({ type: 'home/enterMode', payload: { activeMode: value } });
-      console.log(instance, '9988');
-      instance.toggleSelectStatus(true);
-    } else if (value === 'clear') {
-      instance.clearInstance();
-    } else if (value === 'select') {
-      const _mode = activeMode !== 'select' ? 'select' : '';
-      dispatch({ type: 'home/changeMode', payload: { activeMode: _mode } });
-      dispatch({ type: 'home/setDrawMode', payload: { mode: '' } });
-      instance.toggleSelectStatus();
-    } else if (value === 'delete') {
-      instance.deleteObject();
-    }
+    setMenu(value);
   };
   return (
     <div className={classnames(style.menu)}>
@@ -44,7 +37,7 @@ const ModeControl: FC<PageProps> = (props) => {
           <div
             className={classnames({
               [style.box]: true,
-              [style.active]: v.value === activeMode,
+              [style.active]: v.value === menu && v.isActiveFunc,
             })}
             key={v.value}
             onClick={() => changeMode(v.value)}
@@ -58,6 +51,8 @@ const ModeControl: FC<PageProps> = (props) => {
   );
 };
 
-export default connect(({ home }: PageProps) => {
-  return { home };
+export default connect(({ global }: ConnectState) => {
+  return {
+    global,
+  };
 })(ModeControl);
