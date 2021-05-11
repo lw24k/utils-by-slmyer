@@ -1,3 +1,10 @@
+/*
+ * @Descripttion:
+ * @version:
+ * @Author: slmyer
+ * @Date: 2021-04-26 21:16:19
+ * @LastEditTime: 2021-05-11 22:46:27
+ */
 //receive dataurl && transform to blob
 
 const transitionToBlob = (dataurl) => {
@@ -37,3 +44,5 @@ const toBaseUrl = (file) => {
 
 // ArrayBuffer 是一个 长度固定的二进制缓冲区 不可读写
 // 需通过DataView 以及 TypedArray 进行操作
+
+export { toBaseUrl };

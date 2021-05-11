@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 22:51:00
- * @LastEditTime: 2021-05-06 22:13:01
+ * @LastEditTime: 2021-05-11 22:23:25
  */
 
 const BASE_FILL_COLOR = 'red';
@@ -30,12 +30,14 @@ export default class {
     control,
     tempDrawingObjects,
     eventEmitHandler,
+    initiveSend,
   }) {
     this.instance = instance;
     this.mode = mode;
     this.control = control;
     this.tempDrawingObjects = tempDrawingObjects;
     this.eventEmitHandler = eventEmitHandler;
+    this.initiveSend = initiveSend;
 
     this.baseFillColor = BASE_FILL_COLOR;
     this.baseStrokeColor = BASE_STROKE_COLOR;
@@ -48,7 +50,6 @@ export default class {
 
   // 模式状态切换 更新指令
   updateControls(status) {
-    this.eventEmitHandler('message', 'gengxin');
     if (!status) {
       this.clearCurrentModeDrawing();
     }

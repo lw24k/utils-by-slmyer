@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 23:05:06
- * @LastEditTime: 2021-05-10 22:44:53
+ * @LastEditTime: 2021-05-11 22:15:50
  */
 import Color from 'color';
 import BaseMode from './BaseMode';
@@ -14,8 +14,16 @@ export default class extends BaseMode {
     control,
     tempDrawingObjects,
     eventEmitHandler,
+    initiveSend,
   }) {
-    super({ instance, mode, control, tempDrawingObjects, eventEmitHandler });
+    super({
+      instance,
+      mode,
+      control,
+      tempDrawingObjects,
+      eventEmitHandler,
+      initiveSend,
+    });
 
     // 缓存记录相关位置信息
     this.position = {};
@@ -123,6 +131,7 @@ export default class extends BaseMode {
       this.clearCurrentModeDrawing();
       this.instance.add(circle);
       this.requestRender();
+      this.initiveSend();
     }
   }
 }

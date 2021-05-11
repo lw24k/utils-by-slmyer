@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 22:40:57
- * @LastEditTime: 2021-05-10 22:44:41
+ * @LastEditTime: 2021-05-11 23:42:47
  */
 import { fabric } from 'fabric';
 import EventBus from 'events';
@@ -46,6 +46,8 @@ export default class extends EventBus {
     this.forbidden = true;
 
     this.zoom = zoom;
+
+    this.revokeObjects = [];
   }
 
   init() {
@@ -85,6 +87,7 @@ export default class extends EventBus {
       control: this.control,
       tempDrawingObjects: this.tempDrawingObjects,
       eventEmitHandler: this.eventEmitHandler,
+      initiveSend: this.initiveSend,
     });
     Object.keys(MODE_TYPES).map((v) => {
       const mode = ModeFactor.excutor(v);
@@ -119,11 +122,14 @@ export default class extends EventBus {
   }
 
   //模式事件处理器 暴露为全局方法
-  eventEmitHandler = (type, msg) => {
+  eventEmitHandler = (type, { mType, msg }) => {
     console.log(type, msg);
     switch (type) {
       case 'message':
-        this.emit('message', msg);
+        this.emit('message', {
+          mType,
+          msg,
+        });
         break;
     }
   };
@@ -135,6 +141,8 @@ export default class extends EventBus {
       this.instance.setDimensions({ width, height });
       this.instance.setZoom(this.zoom * ratio);
       this.instance.absolutePan({ x: 0, y: 0 });
+      this.width = width;
+      this.height = height;
     }
   };
 
@@ -221,5 +229,100 @@ export default class extends EventBus {
       return true;
     }
     return false;
+  }
+
+  // 回退上一步操作
+  revokeObject() {
+    const len = this.instance.getObjects().length;
+    if (len === 0) {
+      this.eventEmitHandler('message', {
+        mType: 'warn',
+        msg: '暂无可回退操作',
+      });
+      return;
+    } else {
+      const _target = this.instance.getObjects()[len - 1];
+      this.revokeObjects.push(_target);
+      this.instance.remove(_target);
+      this.instance.requestRenderAll();
+    }
+  }
+
+  // 撤销上一步操作
+  rebackObject() {
+    const len = this.revokeObjects.length;
+    if (len === 0) {
+      this.eventEmitHandler('message', {
+        mType: 'warn',
+        msg: '暂无可撤销操作',
+      });
+      return;
+    } else {
+      const _target = this.revokeObjects.pop();
+      this.instance.add(_target);
+      this.instance.requestRenderAll();
+    }
+  }
+
+  //h绘制结束事件以及主动推送入口
+  initiveSend = () => {
+    this.revokeObjects = [];
+  };
+
+  setBackgroundImage(file) {
+    fabric.Image.fromURL(file, (oImg) => {
+      // scale image down, and flip it, before adding it onto canvas
+      if (oImg) {
+        // const image = new Image();
+        // image.src = file;
+        // image.onload = () => {
+        //   console.log(
+        //     image.width,
+        //     'www',
+        //     image.height,
+        //     this.width,
+        //     this.height,
+        //   );
+        //   let width = image.width;
+        //   let height = image.height;
+        //   const _wratio = this.width / width;
+        //   const _hratio = this.height / height;
+        //   console.log(_wratio, _hratio);
+        //   let scale = 1;
+        //   let left = 0;
+        //   let top = 0;
+        //   if (_wratio > _hratio) {
+        //     width = width * _hratio;
+        //     height = this.height;
+        //     scale = _hratio;
+        //     left = ((this.width - width) / 2) * _hratio;
+        //   } else {
+        //     width = this.width;
+        //     height = this.height * _wratio;
+        //     scale = _wratio;
+        //     top = ((this.height - height) / 2) * _wratio;
+        //   }
+        //   oImg.set({
+        //     width,
+        //     height,
+        //     imageSmoothing: true,
+        //     left,
+        //     top,
+        //     objectCaching: false,
+        //   });
+        //   console.log(scale, '000');
+        //   this.instance.setBackgroundImage(
+        //     oImg,
+        //     this.instance.renderAll.bind(this.instance),
+        //   );
+        // };
+      } else {
+        this.eventEmitHandler('message', {
+          mType: 'warn',
+          msg: '导入图片失败',
+        });
+        return;
+      }
+    });
   }
 }

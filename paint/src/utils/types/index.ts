@@ -3,13 +3,16 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-29 20:55:41
- * @LastEditTime: 2021-05-10 22:41:13
+ * @LastEditTime: 2021-05-11 21:37:35
  */
 import { MODE_TYPES } from '../mode/mode-types';
 import mode from 'icon/mode.png';
 import clear from 'icon/clear.png';
 import select from 'icon/select.png';
 import _delete from 'icon/delete.png';
+import upload from 'icon/upload.png';
+import reback from 'icon/reback.png';
+import revoke from 'icon/revoke.png';
 
 import circle from 'icon/circle.png';
 import free from 'icon/free.png';
@@ -20,6 +23,7 @@ export interface SingleType {
   icon: any;
   mode?: string;
   isActiveFunc?: boolean;
+  [propName: string]: any;
 }
 
 interface DrawType {
@@ -55,6 +59,22 @@ const MODE_MENU: Array<SingleType> = [
     title: '删除',
     value: 'delete',
     icon: _delete,
+  },
+  {
+    title: '上传',
+    value: 'upload',
+    icon: upload,
+    isUpload: true,
+  },
+  {
+    title: '回退',
+    value: 'revoke',
+    icon: revoke,
+  },
+  {
+    title: '撤销',
+    value: 'reback',
+    icon: reback,
   },
 ];
 

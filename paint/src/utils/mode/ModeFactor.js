@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 22:49:47
- * @LastEditTime: 2021-05-07 21:28:46
+ * @LastEditTime: 2021-05-11 22:12:59
  */
 import { MODE_TYPES } from './mode-types';
 import CircleMode from './circle-mode';
@@ -22,11 +22,13 @@ export default class {
     control,
     tempDrawingObjects,
     eventEmitHandler,
+    initiveSend,
   }) {
     this.instance = instance;
     this.control = control;
     this.tempDrawingObjects = tempDrawingObjects;
     this.eventEmitHandler = eventEmitHandler;
+    this.initiveSend = initiveSend;
   }
 
   static excutor(mode) {
@@ -38,6 +40,7 @@ export default class {
           mode,
           tempDrawingObjects: this.tempDrawingObjects,
           eventEmitHandler: this.eventEmitHandler,
+          initiveSend: this.initiveSend,
         });
 
       case MODE_TYPES.FREE_MODE:
@@ -47,6 +50,7 @@ export default class {
           mode,
           tempDrawingObjects: this.tempDrawingObjects,
           eventEmitHandler: this.eventEmitHandler,
+          initiveSend: this.initiveSend,
         });
       case MODE_TYPES.FREE_BRUSH_MODE:
         return new FreeBrushMode({
@@ -55,6 +59,7 @@ export default class {
           mode,
           tempDrawingObjects: this.tempDrawingObjects,
           eventEmitHandler: this.eventEmitHandler,
+          initiveSend: this.initiveSend,
         });
     }
   }

@@ -4,7 +4,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-05-07 21:09:41
- * @LastEditTime: 2021-05-07 22:01:03
+ * @LastEditTime: 2021-05-11 22:16:24
  */
 import { fabric } from 'fabric';
 import BaseMode from './BaseMode';
@@ -15,8 +15,16 @@ export default class extends BaseMode {
     control,
     tempDrawingObjects,
     eventEmitHandler,
+    initiveSend,
   }) {
-    super({ instance, mode, control, tempDrawingObjects, eventEmitHandler });
+    super({
+      instance,
+      mode,
+      control,
+      tempDrawingObjects,
+      eventEmitHandler,
+      initiveSend,
+    });
     this.baseMargin = 2;
   }
   updateControls(status) {
@@ -53,5 +61,9 @@ export default class extends BaseMode {
       this.instance,
     );
     this.instance.freeDrawingBrush.width = this.baseStrokeWidth;
+  }
+
+  handleMouseUp(event) {
+    this.initiveSend();
   }
 }

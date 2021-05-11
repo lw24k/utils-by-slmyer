@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-05-10 21:03:01
- * @LastEditTime: 2021-05-10 22:39:15
+ * @LastEditTime: 2021-05-11 21:52:44
  */
 import React, { FC, useState } from 'react';
 import classnames from 'classnames';
@@ -51,6 +51,13 @@ const Paint: FC<RenderProps> = (props) => {
         break;
       case 'delete':
         instance.deleteObject();
+        break;
+      case 'revoke':
+        instance.revokeObject();
+        break;
+      case 'reback':
+        instance.rebackObject();
+        break;
     }
   };
 

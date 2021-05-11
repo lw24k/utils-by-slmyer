@@ -6,7 +6,7 @@ freeDrawingBrush.width is a number in pixels, and represents brush thickness.
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 23:05:06
- * @LastEditTime: 2021-05-07 22:25:51
+ * @LastEditTime: 2021-05-11 22:16:34
  */
 import { fabric } from 'fabric';
 import BaseMode from './BaseMode';
@@ -17,8 +17,16 @@ export default class extends BaseMode {
     control,
     tempDrawingObjects,
     eventEmitHandler,
+    initiveSend,
   }) {
-    super({ instance, mode, control, tempDrawingObjects, eventEmitHandler });
+    super({
+      instance,
+      mode,
+      control,
+      tempDrawingObjects,
+      eventEmitHandler,
+      initiveSend,
+    });
   }
   updateControls(status) {
     if (!status) {
@@ -33,5 +41,9 @@ export default class extends BaseMode {
   setDrawStyle({ color = this.baseStrokeColor, width = this.baseStrokeWidth }) {
     this.baseStrokeWidth = width;
     this.baseStrokeColor = color;
+  }
+
+  handleMouseUp(event) {
+    this.initiveSend();
   }
 }
