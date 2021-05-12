@@ -3,10 +3,10 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-29 20:54:34
- * @LastEditTime: 2021-05-11 22:52:16
+ * @LastEditTime: 2021-05-12 22:10:57
  */
 import classnames from 'classnames';
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { MODE_MENU, Type } from 'utils/types/index.ts';
 import style from './style/index.scss';
 import { connect, ConnectProps, Dispatch } from 'umi';
@@ -47,15 +47,12 @@ const ModeControl: FC<PageProps> = (props) => {
   };
 
   const upProps = {
-    beforeUpload: (file: { type: string; name: any }) => {
-      if (file.type !== 'image/png') {
-        message.error(`${file.name} is not a png file`);
-      }
-      return false;
-    },
     onChange: async (info: { fileList: any }) => {
-      console.log(info.fileList);
-      const file = info.fileList[0].originFileObj;
+      const file = info.fileList[info.fileList.length - 1].originFileObj;
+      if (!file.type.includes('image')) {
+        message.error(`${file.name} is not a png file`);
+        return false;
+      }
       const result = await toBaseUrl(file);
       instance.setBackgroundImage(result);
     },

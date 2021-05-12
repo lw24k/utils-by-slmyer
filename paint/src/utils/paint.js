@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 22:40:57
- * @LastEditTime: 2021-05-11 23:42:47
+ * @LastEditTime: 2021-05-12 22:41:28
  */
 import { fabric } from 'fabric';
 import EventBus from 'events';
@@ -137,12 +137,13 @@ export default class extends EventBus {
   //Sets dimensions (width, height) of this canvas instance
   //canvas 画布实例尺寸变化
   changeCanvasSize = ({ width, height, ratio }) => {
+    console.log(ratio, this.zoom);
     if (this.ready) {
       this.instance.setDimensions({ width, height });
-      this.instance.setZoom(this.zoom * ratio);
+      this.instance.setZoom(this.zoom * (width / this.width));
       this.instance.absolutePan({ x: 0, y: 0 });
-      this.width = width;
-      this.height = height;
+      // this.width = width;
+      // this.height = height;
     }
   };
 
@@ -210,7 +211,8 @@ export default class extends EventBus {
   // 清空画布
   clearInstance() {
     this.clearAllDrawingObject();
-    this.instance.remove(...this.instance.getObjects());
+    // this.instance.remove(...this.instance.getObjects());
+    this.instance.clear();
     this.instance.requestRenderAll();
     return true;
   }
@@ -273,49 +275,40 @@ export default class extends EventBus {
     fabric.Image.fromURL(file, (oImg) => {
       // scale image down, and flip it, before adding it onto canvas
       if (oImg) {
-        // const image = new Image();
-        // image.src = file;
-        // image.onload = () => {
-        //   console.log(
-        //     image.width,
-        //     'www',
-        //     image.height,
-        //     this.width,
-        //     this.height,
-        //   );
-        //   let width = image.width;
-        //   let height = image.height;
-        //   const _wratio = this.width / width;
-        //   const _hratio = this.height / height;
-        //   console.log(_wratio, _hratio);
-        //   let scale = 1;
-        //   let left = 0;
-        //   let top = 0;
-        //   if (_wratio > _hratio) {
-        //     width = width * _hratio;
-        //     height = this.height;
-        //     scale = _hratio;
-        //     left = ((this.width - width) / 2) * _hratio;
-        //   } else {
-        //     width = this.width;
-        //     height = this.height * _wratio;
-        //     scale = _wratio;
-        //     top = ((this.height - height) / 2) * _wratio;
-        //   }
-        //   oImg.set({
-        //     width,
-        //     height,
-        //     imageSmoothing: true,
-        //     left,
-        //     top,
-        //     objectCaching: false,
-        //   });
-        //   console.log(scale, '000');
-        //   this.instance.setBackgroundImage(
-        //     oImg,
-        //     this.instance.renderAll.bind(this.instance),
-        //   );
-        // };
+        let width = oImg.width;
+        let height = oImg.height;
+        const _wratio = this.width / width;
+        const _hratio = this.height / height;
+        let scaleY = 1;
+        let scaleX = 1;
+        let left = 0;
+        let top = 0;
+        if (oImg.width > this.width || oImg.height > this.height) {
+          if (_wratio > _hratio) {
+            scaleX = _hratio;
+            scaleY = _hratio;
+            left = (this.width - width * scaleY) / 2;
+          } else {
+            scaleX = _wratio;
+            scaleY = _wratio;
+            left = (this.height - height * scaleX) / 2;
+          }
+        } else {
+          left = (this.width - width) / 2;
+          top = (this.height - height) / 2;
+        }
+        this.instance.setBackgroundImage(
+          oImg,
+          this.instance.renderAll.bind(this.instance),
+          {
+            imageSmoothing: true,
+            left,
+            top,
+            objectCaching: false,
+            scaleX,
+            scaleY,
+          },
+        );
       } else {
         this.eventEmitHandler('message', {
           mType: 'warn',
@@ -324,5 +317,37 @@ export default class extends EventBus {
         return;
       }
     });
+  }
+
+  //export canvas
+  exportCanvas(format = 'png', quality = 1, width = 1920, height = 1080) {
+    //默认按画布比例导出
+    const target = this.instance.toDataURL({
+      format,
+      quality,
+      width: width * this.instance.getZoom(),
+      height: height * this.instance.getZoom(),
+    });
+    const transitionToBlob = (dataurl) => {
+      const minestr = atob(dataurl.split(',')[1]);
+      const minetype = dataurl.split(',')[0].split(':')[1].split(';')[0];
+
+      // create ArrayBuffer
+      const ab = new ArrayBuffer(minestr.length);
+
+      // create an array of 8-bit unsigned integers
+      const ua = new Uint8Array(ab);
+
+      for (let i = 0; i < minestr.length; i++) {
+        ua[i] = minestr.charCodeAt(i);
+      }
+
+      return new Blob([ua], { type: minetype });
+    };
+    const res = transitionToBlob(target);
+    return {
+      dataurl: target,
+      blob: res,
+    };
   }
 }

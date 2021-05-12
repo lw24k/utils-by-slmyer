@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 22:22:10
- * @LastEditTime: 2021-05-11 22:01:54
+ * @LastEditTime: 2021-05-12 21:40:34
  */
 import { useState, useEffect, FC } from 'react';
 import classnames from 'classnames';
@@ -29,7 +29,12 @@ const IndexPage: FC<PageProps> = ({ setInstance }) => {
     message.info(msg);
   };
   useEffect(() => {
-    instance = new Paint({ id: 'canvas' });
+    instance = new Paint({
+      id: 'canvas',
+      width: 1920,
+      height: 1080,
+      zoom: 1,
+    });
     instance.init();
     instance.on('message', messageHandle);
     setInstance(instance);

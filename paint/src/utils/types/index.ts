@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-29 20:55:41
- * @LastEditTime: 2021-05-11 21:37:35
+ * @LastEditTime: 2021-05-12 22:14:32
  */
 import { MODE_TYPES } from '../mode/mode-types';
 import mode from 'icon/mode.png';
@@ -13,6 +13,7 @@ import _delete from 'icon/delete.png';
 import upload from 'icon/upload.png';
 import reback from 'icon/reback.png';
 import revoke from 'icon/revoke.png';
+import exportIcon from 'icon/export.png';
 
 import circle from 'icon/circle.png';
 import free from 'icon/free.png';
@@ -75,6 +76,11 @@ const MODE_MENU: Array<SingleType> = [
     title: '撤销',
     value: 'reback',
     icon: reback,
+  },
+  {
+    title: '导出',
+    value: 'export',
+    icon: exportIcon,
   },
 ];
 

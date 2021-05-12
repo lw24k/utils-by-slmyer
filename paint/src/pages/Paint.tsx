@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-05-10 21:03:01
- * @LastEditTime: 2021-05-11 21:52:44
+ * @LastEditTime: 2021-05-12 22:40:54
  */
 import React, { FC, useState } from 'react';
 import classnames from 'classnames';
@@ -34,6 +34,14 @@ const Paint: FC<RenderProps> = (props) => {
     setVisible(false);
   };
 
+  const handleExport = () => {
+    const res = instance.exportCanvas();
+    const a = document.createElement('a'); // 创建a标签
+    a.setAttribute('download', '默认导出.png'); // download属性
+    a.setAttribute('href', res.dataurl); // href链接
+    a.click(); // 自执行点击事件
+  };
+
   const changeMenu = (menu: string) => {
     setMenu(menu);
     switch (menu) {
@@ -44,6 +52,7 @@ const Paint: FC<RenderProps> = (props) => {
         break;
       case 'mode':
         instance.toggleSelectStatus(true);
+        instance.enterMode(mode);
         setVisible(true);
         break;
       case 'clear':
@@ -57,6 +66,9 @@ const Paint: FC<RenderProps> = (props) => {
         break;
       case 'reback':
         instance.rebackObject();
+        break;
+      case 'export':
+        handleExport();
         break;
     }
   };
