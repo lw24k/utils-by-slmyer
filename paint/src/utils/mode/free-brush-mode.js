@@ -4,7 +4,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-05-07 21:09:41
- * @LastEditTime: 2021-05-11 22:16:24
+ * @LastEditTime: 2021-05-12 22:51:58
  */
 import { fabric } from 'fabric';
 import BaseMode from './BaseMode';
@@ -36,13 +36,14 @@ export default class extends BaseMode {
   }
   // 设置模式样式
   setDrawStyle({
-    color = this.baseStrokeColor,
-    width = this.baseStrokeWidth,
+    storkeColor = this.baseStrokeColor,
+    storkeWidth = this.baseStrokeWidth,
     margin = this.baseMargin,
   }) {
-    this.baseStrokeWidth = width;
-    this.baseFillColor = color;
+    this.baseStrokeWidth = storkeWidth;
+    this.baseFillColor = storkeColor;
     this.baseMargin = margin;
+    this.initBrush();
   }
   // 初始化 画笔 -- 画笔成块状
   initBrush() {

@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-05-10 21:03:01
- * @LastEditTime: 2021-05-12 22:40:54
+ * @LastEditTime: 2021-05-12 22:58:10
  */
 import React, { FC, useState } from 'react';
 import classnames from 'classnames';
@@ -85,6 +85,13 @@ const Paint: FC<RenderProps> = (props) => {
     instance.leaveMode(mode);
     setMode(item.mode);
     instance.enterMode(item.mode);
+    if (item.mode === 'FREE_BRUSH_MODE') {
+      instance.setDrawStyle({
+        storkeColor: 'rgba(255, 255, 255, 0.7)',
+        storkeWidth: 10,
+        margin: 2,
+      });
+    }
   };
   return (
     <div className={classnames(style.root)}>

@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 22:40:57
- * @LastEditTime: 2021-05-12 22:41:28
+ * @LastEditTime: 2021-05-12 22:54:51
  */
 import { fabric } from 'fabric';
 import EventBus from 'events';
@@ -350,4 +350,27 @@ export default class extends EventBus {
       blob: res,
     };
   }
+
+  setDrawStyle({
+    fillColor,
+    storkeWidth,
+    storkeColor,
+    textSize,
+    textFill,
+    textStorke,
+  }) {
+    Object.values(this.excutor).map((excutor) => {
+      excutor.setDrawStyle({
+        fillColor,
+        storkeWidth,
+        storkeColor,
+        textSize,
+        textFill,
+        textStorke,
+      });
+    });
+  }
+
+  // 获取模式执行器
+  getMode = (name) => this.excutor[name];
 }
