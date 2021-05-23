@@ -2,15 +2,15 @@
  * @Descripttion:
  * @version:
  * @Author: slmyer
- * @Date: 2021-05-23 19:31:45
- * @LastEditTime: 2021-05-23 19:31:59
+ * @Date: 2021-05-23 17:44:03
+ * @LastEditTime: 2021-05-23 21:10:00
  */
 const shufflely = require("shufflefy");
 
 let arr = [];
 let index = 1;
 
-while (index <= 3) {
+while (index <= 100) {
   arr.push(index);
   index++;
 }
@@ -119,4 +119,35 @@ const mergeSort = (source) => {
   const left = mergeSort(source.slice(0, middle));
   const right = mergeSort(source.slice(middle, length));
   return merge(left, right);
+};
+
+//
+
+const partition = (arr, left, right) => {
+  let pivot = arr[right - 1];
+  let i = left;
+  let j = right - 1;
+  while (i !== j) {
+    if (arr[i] < pivot) {
+      i++;
+    } else {
+      swap(arr, i, --j);
+    }
+  }
+  swap(arr, j, right - 1);
+  return i;
+};
+
+/**
+ * @description: 快排 以最后一个元素为基准点
+ * @param {*} source
+ * @return {*}
+ */
+const quickSort = (source, l, r) => {
+  if (r - l <= 1) {
+    return;
+  }
+  const p = partition(source, l, r);
+  quickSort(source, l, p);
+  quickSort(source, p + 1, r);
 };
