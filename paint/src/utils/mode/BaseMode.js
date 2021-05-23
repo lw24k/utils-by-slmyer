@@ -3,14 +3,14 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 22:51:00
- * @LastEditTime: 2021-05-11 22:23:25
+ * @LastEditTime: 2021-05-23 17:34:59
  */
 
 const BASE_FILL_COLOR = 'red';
 const BASE_STROKE_COLOR = 'red';
 const BASE_STROKE_WIDTH = 2;
 const BASE_TEXT_COLOR = '#000';
-const BASE_TEXT_SIZE = 16;
+const BASE_TEXT_SIZE = 20;
 
 /**
  * @description:

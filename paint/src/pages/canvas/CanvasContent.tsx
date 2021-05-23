@@ -3,9 +3,9 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 22:22:10
- * @LastEditTime: 2021-05-12 21:40:34
+ * @LastEditTime: 2021-05-23 16:37:25
  */
-import { useState, useEffect, FC } from 'react';
+import { useState, useEffect, FC, useRef } from 'react';
 import classnames from 'classnames';
 import styles from './index.scss';
 import Paint from '@/utils/paint.js';
@@ -15,15 +15,18 @@ import { message } from 'antd';
 
 interface PageProps {
   setInstance: (v: InstanceType) => void;
+  requestData: Function;
 }
 interface MessageType {
   mType: string;
   msg: string;
 }
 let instance: InstanceType;
-const IndexPage: FC<PageProps> = ({ setInstance }) => {
+const IndexPage: FC<PageProps> = ({ setInstance, requestData }) => {
   const [state, setstate] = useState(false);
   const [ratio, setRatio] = useState(1.778);
+
+  const _ref = useRef();
 
   const messageHandle = ({ mType, msg }: MessageType) => {
     message.info(msg);
@@ -33,11 +36,13 @@ const IndexPage: FC<PageProps> = ({ setInstance }) => {
       id: 'canvas',
       width: 1920,
       height: 1080,
+      requestData,
       zoom: 1,
     });
     instance.init();
     instance.on('message', messageHandle);
     setInstance(instance);
+    console.log(_ref, '_ref_ref');
     return () => {
       instance.dispose();
     };

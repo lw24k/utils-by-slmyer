@@ -3,23 +3,25 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-05-10 21:03:01
- * @LastEditTime: 2021-05-12 22:58:10
+ * @LastEditTime: 2021-05-23 17:36:04
  */
 import React, { FC, useState } from 'react';
 import classnames from 'classnames';
 import style from 'common/style/main-layout.scss';
-import { Drawer } from 'antd';
+import { Drawer, Form, Input, Button } from 'antd';
 import Tool from 'components/Tool';
 import CanvasContent from './canvas/CanvasContent';
 import { connect, ConnectProps, Dispatch, SingleType } from 'umi';
 import { ConnectState, InstanceType, GlobalState } from '../../types/type';
 import { MODE_CONTROL } from '@/utils/types/index';
-
+import GlobalModal from '../components/Modal';
 interface RenderProps extends ConnectProps {
   global: GlobalState;
   children: React.ReactChild;
   dispatch: Dispatch;
 }
+
+let myResolve: any;
 
 const Paint: FC<RenderProps> = (props) => {
   const {
@@ -29,6 +31,8 @@ const Paint: FC<RenderProps> = (props) => {
   const [visible, setVisible] = useState<boolean>(false);
   const [menu, setMenu] = useState<string>('');
   const [mode, setMode] = useState<string>('');
+  const [modalVisible, setModalVisible] = useState(false);
+  const [text, setText] = useState('');
 
   const onClose = () => {
     setVisible(false);
@@ -91,7 +95,36 @@ const Paint: FC<RenderProps> = (props) => {
         storkeWidth: 10,
         margin: 2,
       });
+    } else if (item.mode === 'TEXT_MODE') {
     }
+  };
+
+  const handleShow = async () => {
+    setModalVisible(true);
+    const eventPromise = new Promise((resolve, reject) => {
+      myResolve = resolve;
+    });
+    const result = await eventPromise;
+    return result;
+  };
+
+  const handleHidden = async () => {
+    if (myResolve) {
+      myResolve(false);
+    }
+    setModalVisible(false);
+  };
+
+  const requestData = async (name: string) => {
+    const result = await handleShow();
+    return result;
+  };
+
+  const onSubmit = () => {
+    myResolve(text);
+    myResolve = null;
+    setText('');
+    handleHidden();
   };
   return (
     <div className={classnames(style.root)}>
@@ -99,7 +132,10 @@ const Paint: FC<RenderProps> = (props) => {
         <Tool menu={menu} setMenu={changeMenu} setVisible={openPanel}></Tool>
       </div>
       <div className={classnames(style.canvas)}>
-        <CanvasContent setInstance={setInstance}></CanvasContent>
+        <CanvasContent
+          setInstance={setInstance}
+          requestData={requestData}
+        ></CanvasContent>
       </div>
       <Drawer
         title={(menu && MODE_CONTROL[menu]?.title) || ''}
@@ -131,6 +167,22 @@ const Paint: FC<RenderProps> = (props) => {
             })}
         </div>
       </Drawer>
+      <GlobalModal
+        visible={modalVisible}
+        handleClose={handleHidden}
+        onSubmit={onSubmit}
+        title="请输入文字"
+      >
+        <Form>
+          <Form.Item label="文字内容">
+            <Input
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              onPressEnter={onSubmit}
+            />
+          </Form.Item>
+        </Form>
+      </GlobalModal>
     </div>
   );
 };

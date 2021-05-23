@@ -3,12 +3,13 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 22:49:47
- * @LastEditTime: 2021-05-11 22:12:59
+ * @LastEditTime: 2021-05-23 16:29:09
  */
 import { MODE_TYPES } from './mode-types';
 import CircleMode from './circle-mode';
 import FreeMode from './free-mode';
 import FreeBrushMode from './free-brush-mode';
+import TextMode from './text-mode';
 
 /**
  * @description:
@@ -23,12 +24,14 @@ export default class {
     tempDrawingObjects,
     eventEmitHandler,
     initiveSend,
+    requestData,
   }) {
     this.instance = instance;
     this.control = control;
     this.tempDrawingObjects = tempDrawingObjects;
     this.eventEmitHandler = eventEmitHandler;
     this.initiveSend = initiveSend;
+    this.requestData = requestData;
   }
 
   static excutor(mode) {
@@ -60,6 +63,16 @@ export default class {
           tempDrawingObjects: this.tempDrawingObjects,
           eventEmitHandler: this.eventEmitHandler,
           initiveSend: this.initiveSend,
+        });
+      case MODE_TYPES.TEXT_MODE:
+        return new TextMode({
+          instance: this.instance,
+          control: this.control,
+          mode,
+          tempDrawingObjects: this.tempDrawingObjects,
+          eventEmitHandler: this.eventEmitHandler,
+          initiveSend: this.initiveSend,
+          requestData: this.requestData,
         });
     }
   }

@@ -3,7 +3,7 @@
  * @version:
  * @Author: slmyer
  * @Date: 2021-04-27 22:40:57
- * @LastEditTime: 2021-05-12 22:54:51
+ * @LastEditTime: 2021-05-23 16:45:17
  */
 import { fabric } from 'fabric';
 import EventBus from 'events';
@@ -88,6 +88,7 @@ export default class extends EventBus {
       tempDrawingObjects: this.tempDrawingObjects,
       eventEmitHandler: this.eventEmitHandler,
       initiveSend: this.initiveSend,
+      requestData: this.requestData,
     });
     Object.keys(MODE_TYPES).map((v) => {
       const mode = ModeFactor.excutor(v);
